@@ -1,14 +1,16 @@
 <div class="barra">
-    <p>Hola <?php echo $nombre ?? ''; ?></p>
-    <a href="/logout" class="boton">Cerrar Sesión</a>
+    <p>Hola {{ $auth->nombre }}</p>
+
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <a href="#" class="boton" onclick="this.closest('form').submit()">Cerrar sesión</a>
+    </form>
 </div>
 
-<?php if (isset($_SESSION['admin'])) { ?>
+@if ($auth->admin)
     <div class="barra-servicios">
         <a href="/admin" class="boton">Ver Citas</a>
         <a href="/servicios" class="boton">Ver Servicios</a>
         <a href="/servicios/crear" class="boton">Nuevo Servicio</a>
     </div>
-<?php
-}
-?>
+@endif

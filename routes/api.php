@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// API de Citas
+Route::get('/api/servicios', [APIController::class, 'index']);
+Route::post('/api/citas', [APIController::class, 'guardar']);
+Route::post('/api/eliminar', [APIController::class, 'eliminar']);
