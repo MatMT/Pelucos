@@ -1,54 +1,55 @@
 <?php
 
-require_once __DIR__ . '/../includes/app.php';
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
 
-use Controllers\AdminController;
-use Controllers\APIController;
-use Controllers\CitaController;
-use MVC\Router;
-use Controllers\LoginController;
-use Controllers\ServicioController;
+define('LARAVEL_START', microtime(true));
 
-$router = new Router();
+/*
+|--------------------------------------------------------------------------
+| Check If The Application Is Under Maintenance
+|--------------------------------------------------------------------------
+|
+| If the application is in maintenance / demo mode via the "down" command
+| we will load this file so that any pre-rendered content can be shown
+| instead of starting the framework, which could cause an exception.
+|
+*/
 
-// Iniciar Sesión
-$router->get('/', [LoginController::class, 'login']);
-$router->post('/', [LoginController::class, 'login']);
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
 
-// Cerrar Sesión
-$router->get('/logout', [LoginController::class, 'logout']);
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| this application. We just need to utilize it! We'll simply require it
+| into the script here so we don't need to manually load our classes.
+|
+*/
 
-// Recuperar Password
-$router->get('/olvide', [LoginController::class, 'olvide']);
-$router->post('/olvide', [LoginController::class, 'olvide']);
-$router->get('/recuperar', [LoginController::class, 'recuperar']);
-$router->post('/recuperar', [LoginController::class, 'recuperar']);
+require __DIR__.'/../vendor/autoload.php';
 
-// Crear cuenta
-$router->get('/crear-cuenta', [LoginController::class, 'crear']);
-$router->post('/crear-cuenta', [LoginController::class, 'crear']);
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request using
+| the application's HTTP kernel. Then, we will send the response back
+| to this client's browser, allowing them to enjoy our application.
+|
+*/
 
-// Confirmar cuenta
-$router->get('/confirmar-cuenta', [LoginController::class, 'confirmar']);
-$router->get('/mensaje', [LoginController::class, 'mensaje']);
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-// Area Privada
-$router->get('/cita', [CitaController::class, 'index']);
-$router->get('/admin', [AdminController::class, 'index']);
+$kernel = $app->make(Kernel::class);
 
-// API de Citas
-$router->get('/api/servicios', [APIController::class, 'index']);
-$router->post('/api/citas', [APIController::class, 'guardar']);
-$router->post('/api/eliminar', [APIController::class, 'eliminar']);
+$response = $kernel->handle(
+    $request = Request::capture()
+)->send();
 
-// CRUD de Servicios
-$router->get('/servicios', [ServicioController::class, 'index']);
-$router->get('/servicios/crear', [ServicioController::class, 'crear']);
-$router->post('/servicios/crear', [ServicioController::class, 'crear']);
-$router->get('/servicios/actualizar', [ServicioController::class, 'actualizar']);
-$router->post('/servicios/actualizar', [ServicioController::class, 'actualizar']);
-$router->post('/servicios/eliminar', [ServicioController::class, 'eliminar']);
-
-
-// Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
-$router->comprobarRutas();
+$kernel->terminate($request, $response);
