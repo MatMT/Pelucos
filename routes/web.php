@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CitaController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OlvideController;
 use App\Http\Controllers\RegisterController;
@@ -44,7 +45,7 @@ Route::get('/confirmar-cuenta/confirmada/', [ConfirmarController::class, 'store'
 
 // ============================== NAVEGACIÓN
 Route::get('/cita', [CitaController::class, 'index'])->name('cita')->middleware('auth');
-Route::get('/admin', [AdminController::class, 'index'])->middleware('auth');
+Route::get('/admin', [AdminController::class, 'index'])->name('citas')->middleware('auth');
 
 // CRUD de Servicios
 Route::get('/servicios', [ServicioController::class, 'index'])->middleware('auth');

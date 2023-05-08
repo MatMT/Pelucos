@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "PHP_BASE"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Pelucos"
+	}
+}

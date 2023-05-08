@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CitaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ServiciosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // API de Citas
-Route::get('/api/servicios', [APIController::class, 'index']);
-Route::post('/api/citas', [APIController::class, 'guardar']);
-Route::post('/api/eliminar', [APIController::class, 'eliminar']);
+Route::get('/servicios', [ServiciosController::class, 'index']); // Todos los servicios
+
+Route::post('/citas', [CitaController::class, 'store']);
+Route::delete('/eliminar/{id}', [CitaController::class, 'destroy']);
